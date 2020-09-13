@@ -1,6 +1,6 @@
 import random as r
 
-#Funcionar para concatenar numeros
+#Funcion para concatenar numeros
 def numConcat(num1, num2):
     num1 = str(num1)
     num2 = str(num2)
@@ -14,7 +14,7 @@ def numConcat(num1, num2):
 #   84 = C5
 
 # Generacion de poblacion
-tamanhoPoblacion = 100
+tamanhoPoblacion = 10
 data = []
 dataList = []
 
@@ -37,8 +37,8 @@ for l in range(tamanhoPoblacion):
 
 for l in range(len(dataList)):
     print("DNA ", l, ":", dataList[l])
-
-print("ADN progresiones de acordes: \n ")
+print("\n")
+print("ADN progresiones de acordes:")
 print(dataList)
 
 '''
@@ -121,7 +121,7 @@ def checkThirdsAndSixths(progresionTest, i):
 
 
 print("\n")
-progresionTest = ['535762', '555962', '525760', '555760', '535760', '555962', '55596064', '54576064']
+progresionTest = ['535762', '555962', '525760', '555760']
 print("Test: ", progresionTest)
 
 fitnessValuesList = []
