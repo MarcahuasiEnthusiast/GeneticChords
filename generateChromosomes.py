@@ -89,7 +89,7 @@ dictIntervalos = {
 }
 
 def checkInterval(a, b):   # Retorna el intervalo generado entre dos notas
-    x = (abs(a - b)) % 12
+    x = (abs(a - b)) % 12 # 0=12
     interval = None
     if (x == 0): interval = "Unisono"
     if (x == 1): interval = "Segunda Menor"
@@ -269,13 +269,10 @@ def funcionFitness(progresion):
 # Test
 #ADN = generarADN(10)
 #printADN(ADN)
-
 # Notas se generan entre 48 y 72
-
 #Testeando cromosoma individual
 #print("\n")
 #progresion = ['535762', '555962', '525760', '555760', '535760', '555962', '55596064', '54576064']
-
 #funcionFitnessPRINT(['606367', '576065', '596267', '57606467'])
 
 #for i in range(len(ADN)):
@@ -357,9 +354,7 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
     if (answer == 'n'):
         cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
 
-
-
-cruzamientoInit = ["60", "61", "61", "61"]
+cruzamientoInit = ["60", "61", "61", "61"] # bajo fitness
 cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
 print()
 
