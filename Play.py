@@ -129,7 +129,7 @@ def generarADN(n):
         data = []
         for i in range(0, 4, 1):
             chord = ''
-            for j in range(0, r.randint(3,5), 1):
+            for j in range(0, r.randint(3,4), 1):
 
                 if j == 0:
                     x = r.randint(48, 60)
@@ -415,17 +415,21 @@ def crossover(seleccion):
         result.append(seleccion[0][i][0:p] + seleccion[1][i][p:])
     return result
 
-n = input('choose number of chromosomes (1 < n)')
-n = int(n)
+def init():
+    n = input('Elegir número de cromosomas modelo (1 < n)')
+    n = int(n)
 
 
-cromosomasSeleccionados = seleccion(n)
-print("\n")
-print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
-print("Valor Fitness 1: ", funcionFitness(cromosomasSeleccionados[0]))
-print("Valor Fitness 2: ", funcionFitness(cromosomasSeleccionados[1]))
-print("Promedio Valor Fitness: ", (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2, "\n")
-print("\n")
+    cromosomasSeleccionados = seleccion(n)
+    print("\n")
+    print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
+    print("Valor Fitness 1: ", funcionFitness(cromosomasSeleccionados[0]))
+    print("Valor Fitness 2: ", funcionFitness(cromosomasSeleccionados[1]))
+    print("Promedio Valor Fitness: ", (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2, "\n")
+    print("\n")
+    cruzamientoInit = ["60", "61", "61", "61"]  # bajo fitness inicial
+    cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
+    #return cromosomasSeleccionados
 
 #time.sleep(1.0)
 global cont
@@ -434,13 +438,19 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
     cont = 0
     cruzamiento = cruzamientoInit
     stopSendingMIDI()#STOP MIDI
+
+
+
     while(funcionFitness(cruzamiento) <= (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2):
         cruzamiento = crossover(cromosomasSeleccionados)
         print("Valor Fitness del cruzamiento", cont+1, ":", funcionFitness(cruzamiento))
         cont = cont + 1
     print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
-    print("Valor Fitness 1: ", funcionFitness(cromosomasSeleccionados[0]))
-    print("Valor Fitness 2: ", funcionFitness(cromosomasSeleccionados[1]))
+
+
+
+    for i in range(len(cromosomasSeleccionados)):
+        print("Valor Fitness del Cromosoma seleccionado", i+1, funcionFitness(cromosomasSeleccionados[i]))
     print("Promedio Valor Fitness: ",
           (funcionFitness(cromosomasSeleccionados[0]) + funcionFitness(cromosomasSeleccionados[1])) / 2, "\n")
     print("Luego de", cont, "cruzamientos entre los cromosomas seleccionados, obtenemos la siguiente progresion:")
@@ -448,8 +458,9 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
     print("cuyo valor fitness es:", funcionFitness(cruzamiento), "\n")
 
     playChordProgression(cruzamiento, midiout, 1)
+
     answer = input(
-        'Ingrese "y" si está conforme con la progresión de acordes generada. Ingrese "n" para volver a cruzar la selección')
+        "Menu: \n 'n' = volver a cruzar cromosomas \n 'y' = Resultado: escuchar la progresion 8 veces \n 'g' = Generar nueva seleccion")
     print('%s \n' % (answer))
 
     if (answer == 'y'):
@@ -458,9 +469,11 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
         return cruzamiento
     if (answer == 'n'):
         cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
+    if (answer == 'g'):
+        init()
 
-cruzamientoInit = ["60", "61", "61", "61"] # bajo fitness
-cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
+cromosomasSeleccionados = init()
+
 print()
 
 
