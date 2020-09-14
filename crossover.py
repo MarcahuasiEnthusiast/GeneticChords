@@ -2,19 +2,8 @@ import generateChromosomes
 from random import randint
 from typing import List, Optional, Callable, Tuple
 
-chordProgression1 = ['5461706161', '51546156', '4861726065', '5854656567']
-chordProgression2 = ['55586062', '576065', '5057695458', '515866']
-
-print("Chromosoma 1:")
-print(chordProgression1)
-print("Chromosoma 2:")
-print(chordProgression2)
-
-chordProgression1 = str(chordProgression1)
-chordProgression2 = str(chordProgression2)
-
 # n
-seleccion = [['5765626564', '5057695458', '5565634866', '53636163'], ['53616150', '5158704848', '4961715556', '5057615766']]
+seleccion = [['5559626270', '5065695771', '57606549', '566364'], ['50627258', '5653664949', '5461636158', '56606354']]
 #seleccion.append(chordProgression1)
 #seleccion.append(chordProgression2)
 
@@ -23,10 +12,6 @@ seleccion = [['5765626564', '5057695458', '5565634866', '53636163'], ['53616150'
 def crossover(seleccion):
     #if len(a) != len(b):
     #    raise ValueError("Genomes a and b must be of same length")
-
-
-
-
 
     result = []
     for i in range(0, len(seleccion[0])):
@@ -37,6 +22,9 @@ def crossover(seleccion):
         result.append(seleccion[0][i][0:p] + seleccion[1][i][p:])
     return result
 
+
+print(seleccion)
+print(generateChromosomes.funcionFitness(seleccion))
 resultado = crossover(seleccion)
 print(resultado)
 

@@ -1,5 +1,6 @@
 import random as r
-
+from random import randint
+import time
 #Funcion para concatenar numeros
 def numConcat(num1, num2):
     num1 = str(num1)
@@ -262,7 +263,7 @@ def funcionFitness(progresion):
     for i in range(0, len(fitnessValuesList)):
         fitnessTotal += fitnessValuesList[i]
     fitnessTotal = (fitnessTotal/len(fitnessValuesList))
-    print(fitnessTotal)
+    #print(fitnessTotal)
     return fitnessTotal
 
 # Test
@@ -288,23 +289,80 @@ def seleccion(n):
         ADN = generarADN(1)
         #printADN(ADN)
         for i in range(len(ADN)):
-            if (funcionFitness(ADN[i]) >= 200):
+            print(funcionFitness(ADN[i]))
+            if (funcionFitness(ADN[i]) >= 185):
                 cromosomasSeleccionados.append(ADN[i])
     print()
     for i in range(len(cromosomasSeleccionados)):
-        print(cromosomasSeleccionados[i])
-        print(funcionFitness(cromosomasSeleccionados[i]))
+        print("Cromosoma Seleccionado:", i+1, ":", cromosomasSeleccionados[i])
         funcionFitnessPRINT(cromosomasSeleccionados[i])
-        funcionFitnessPRINT(cromosomasSeleccionados[1])
         seleccion.append(cromosomasSeleccionados[i])
 
     return seleccion
 
+def crossover(seleccion):
+    #if len(a) != len(b):
+    #    raise ValueError("Genomes a and b must be of same length")
 
-#n = input('choose number of chromosomes (1 < n)')
-#n = int(n)
+    result = []
+    for i in range(0, len(seleccion[0])):
+        #print("len",len(seleccion[0][i]))
+        if (len(seleccion[0][i]) <= len(seleccion[1][i])):
+            p = randint(0, len(seleccion[0][i]))
+        if (len(seleccion[1][i]) <= len(seleccion[0][i])):
+            p = randint(0, len(seleccion[1][i]))
+        length = len(seleccion[0])
+        #print(seleccion[0][i][0:p] + seleccion[1][i][p:])
+        #result.append((seleccion[0][i][0:p] + seleccion[1][i][p:], seleccion[1][i][0:p] + seleccion[0][i][p:]))
+        result.append(seleccion[0][i][0:p] + seleccion[1][i][p:])
+    return result
+
+n = input('choose number of chromosomes (1 < n)')
+n = int(n)
 
 
-#cromosomasSeleccionados = seleccion(n)
-#print(cromosomasSeleccionados)
+cromosomasSeleccionados = seleccion(n)
+print("\n")
+print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
+print("Valor Fitness 1: ", funcionFitness(cromosomasSeleccionados[0]))
+print("Valor Fitness 2: ", funcionFitness(cromosomasSeleccionados[1]))
+print("Promedio Valor Fitness: ", (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2, "\n")
+print("\n")
+
+time.sleep(5.0)
+global cont
+def cruzar(cromosomasSeleccionados, cruzamientoInit):
+    global cont
+    cont = 0
+    cruzamiento = cruzamientoInit
+    while(funcionFitness(cruzamiento) <= (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2):
+        cruzamiento = crossover(cromosomasSeleccionados)
+        print("Valor Fitness del cruzamiento", cont+1, ":", funcionFitness(cruzamiento))
+        cont = cont + 1
+    print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
+    print("Valor Fitness 1: ", funcionFitness(cromosomasSeleccionados[0]))
+    print("Valor Fitness 2: ", funcionFitness(cromosomasSeleccionados[1]))
+    print("Promedio Valor Fitness: ",
+          (funcionFitness(cromosomasSeleccionados[0]) + funcionFitness(cromosomasSeleccionados[1])) / 2, "\n")
+    print("Luego de", cont, "cruzamientos entre los cromosomas seleccionados, obtenemos la siguiente progresion:")
+    print(cruzamiento)
+    print("cuyo valor fitness es:", funcionFitness(cruzamiento), "\n")
+    answer = input(
+        'Ingrese "y" si está conforme con la progresión de acordes generada. Ingrese "n" para volver a cruzar la selección')
+    print('%s \n' % (answer))
+
+    if (answer == 'y'):
+        print("RESULTADO FINAL:", cruzamiento)
+        return cruzamiento
+    if (answer == 'n'):
+        cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
+
+
+
+cruzamientoInit = ["60", "61", "61", "61"]
+cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
+print()
+
+
+
 

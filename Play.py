@@ -1,8 +1,8 @@
 import time
 import rtmidi
 
-ADN = [['57656250', '5057704848', '5561715556', '5357615766']]
-#chordProgression = ['5865705465', '5861655566', '536260', '515967']", "['57546464', '576462', '5565625270', '4864676451']
+ADN = [['606266', '59626760', '60536055', '5156685551','51626457', '56586559', '53656358', '5965696363']]
+chordProgression = ['49596856', '51557258', '516067', '56606863']
 #chordProgression = ['525964']
 def numConcat(num1, num2):
     num1 = str(num1)
@@ -108,6 +108,6 @@ def playChordProgression(data):
                 pass
     del midiout
 
-playADN(ADN)
-#playChordProgression(chordProgression)
+#playADN(ADN)
+playChordProgression(chordProgression)
 
