@@ -398,7 +398,7 @@ def seleccion(n):
 
     return seleccion
 
-def crossover(seleccion):
+def singlePointCrossover(seleccion):
     #if len(a) != len(b):
     #    raise ValueError("Genomes a and b must be of same length")
 
@@ -439,28 +439,31 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
     cruzamiento = cruzamientoInit
     stopSendingMIDI()#STOP MIDI
 
-
-
-    while(funcionFitness(cruzamiento) <= (funcionFitness(cromosomasSeleccionados[0])+funcionFitness(cromosomasSeleccionados[1]))/2):
-        cruzamiento = crossover(cromosomasSeleccionados)
+    sumFitness = 0
+    for i in range(len(cromosomasSeleccionados)):
+        sumFitness += funcionFitness(cromosomasSeleccionados[i])
+    sumFitness = sumFitness / len(cromosomasSeleccionados)
+    while(funcionFitness(cruzamiento) <= (sumFitness)):
+        cruzamiento = singlePointCrossover(cromosomasSeleccionados)
         print("Valor Fitness del cruzamiento", cont+1, ":", funcionFitness(cruzamiento))
         cont = cont + 1
-    print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
+        print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
 
 
 
     for i in range(len(cromosomasSeleccionados)):
         print("Valor Fitness del Cromosoma seleccionado", i+1, funcionFitness(cromosomasSeleccionados[i]))
     print("Promedio Valor Fitness: ",
-          (funcionFitness(cromosomasSeleccionados[0]) + funcionFitness(cromosomasSeleccionados[1])) / 2, "\n")
+          sumFitness, "\n")
     print("Luego de", cont, "cruzamientos entre los cromosomas seleccionados, obtenemos la siguiente progresion:")
     print(cruzamiento)
     print("cuyo valor fitness es:", funcionFitness(cruzamiento), "\n")
 
+    #Reoroducir Progresion
     playChordProgression(cruzamiento, midiout, 1)
 
     answer = input(
-        "Menu: \n 'n' = volver a cruzar cromosomas \n 'y' = Resultado: escuchar la progresion 8 veces \n 'g' = Generar nueva seleccion")
+        "Menu: \n 'n' = volver a cruzar cromosomas \n 'y' = Resultado: escuchar la progresion 8 veces \n 'g' = Generar nueva seleccion \n 'm' = Generar Mutacion")
     print('%s \n' % (answer))
 
     if (answer == 'y'):
@@ -471,6 +474,83 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
         cruzamiento = cruzar(cromosomasSeleccionados, cruzamientoInit)
     if (answer == 'g'):
         init()
+    if (answer == 'm'):
+        mutar(cruzamiento, cromosomasSeleccionados, cruzamientoInit)
+
+def mutar(progresion, cromosomasSeleccionados, cruzamientoInit):
+    global cont
+    cont = 0
+    stopSendingMIDI()#STOP MIDI
+    #CALCULO LA MEDIA FITNESS DE LA SELECCION
+    sumFitness = 0
+    for i in range(len(cromosomasSeleccionados)):
+        sumFitness += funcionFitness(cromosomasSeleccionados[i])
+    sumFitness = sumFitness / len(cromosomasSeleccionados)
+
+
+    index = int(input("Ingresa posicion de la progresion para mutar un acorde (0 a n-1)"))
+    while(funcionFitness(cruzamientoInit) <= (sumFitness)):
+        for i in range(len(progresion)):
+            print(progresion[i])
+            if (i == index):
+                randPos = randint(0, len(progresion[i])-1)
+                for j in range(0, len(progresion[i]), 2):
+
+                    if randPos % 2 == 1:
+                        randPos = randPos - 1
+
+                    randomNote = randint(48,72)
+                    randomNote = str(randomNote)
+                    note = numConcat(randomNote[0],randomNote[1])
+                    print("note aleatoria:",note)
+                    print("posicion aleatoria",randPos)
+                    print(progresion[i][randPos])
+                    print(progresion[i][randPos+1])
+                    print()
+                    print(progresion[i])
+                    chord = progresion[i]
+                    start = chord[:randPos] + randomNote
+                    end = chord[randPos+2:]
+                    print("Antiguo:",chord)
+                    print("comienzo",start)
+                    print("final",end)
+                    chord = start + end
+                    print("Nuevo:",chord)
+                    #print(progresion[randPos][j]+1)
+                    #progresion[i][randPos] = randomNoteA
+                    #progresion[i][randPos+1] = randomNoteB
+                    print()
+                    print(progresion)
+                    progresion[i] = chord
+                    print(progresion)
+
+        cruzamientoInit = progresion
+        #progresion = singlePointCrossover(cromosomasSeleccionados)
+        print("Valor Fitness de la mutacion", cont+1, ":", funcionFitness(progresion))
+        cont = cont + 1
+
+    #for i in range(len(cromosomasSeleccionados)):
+    #    print("Valor Fitness del Cromosoma seleccionado", i+1, funcionFitness(cromosomasSeleccionados[i]))
+    #print("Promedio Valor Fitness: ",
+    #      sumFitness, "\n")
+    #print("Luego de", cont, "cruzamientos entre los cromosomas seleccionados, obtenemos la siguiente progresion:")
+    #print(cruzamiento)
+    #print("cuyo valor fitness es:", funcionFitness(cruzamiento), "\n")
+
+    playChordProgression(progresion, midiout, 1)
+    answer = input(
+        "Menu: \n 'n' = volver a cruzar cromosomas \n 'y' = Resultado: escuchar la progresion 8 veces \n 'g' = Generar nueva seleccion \n 'm' = Generar Mutacion")
+    print('%s \n' % (answer))
+
+    if (answer == 'y'):
+        print("RESULTADO FINAL:", progresion)
+        playChordProgression(progresion, midiout, 4)
+        return progresion
+    if (answer == 'n'):
+        progresion = cruzar(cromosomasSeleccionados, ["60", "61", "61", "61"])
+    if (answer == 'g'):
+        init()
+    if (answer == 'm'): mutar(progresion, cromosomasSeleccionados, ["60", "61", "61", "61"])
 
 cromosomasSeleccionados = init()
 
