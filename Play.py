@@ -77,6 +77,8 @@ def playADN(data):
 
     #del midiout
 
+# generamos poblacion
+
 def playChordProgression(data, midiout, n):
 
     for j in range(n):
@@ -124,7 +126,6 @@ def generarADN(n):
     tamanhoPoblacion = n
     data = []
     dataList = []
-
     for l in range(tamanhoPoblacion):
         data = []
         for i in range(0, 4, 1):
@@ -384,11 +385,11 @@ def seleccion(n):
     cromosomasSeleccionados = []
     seleccion = []
     while (len(cromosomasSeleccionados) < n):
-        ADN = generarADN(1)
+        ADN = generarADN(10)
         #printADN(ADN)
         for i in range(len(ADN)):
             print(funcionFitness(ADN[i]))
-            if (funcionFitness(ADN[i]) >= 185):
+            if (funcionFitness(ADN[i]) >= 150):
                 cromosomasSeleccionados.append(ADN[i])
     print()
     for i in range(len(cromosomasSeleccionados)):
@@ -399,9 +400,6 @@ def seleccion(n):
     return seleccion
 
 def singlePointCrossover(seleccion):
-    #if len(a) != len(b):
-    #    raise ValueError("Genomes a and b must be of same length")
-
     result = []
     for i in range(0, len(seleccion[0])):
         #print("len",len(seleccion[0][i]))
@@ -418,7 +416,6 @@ def singlePointCrossover(seleccion):
 def init():
     n = input('Elegir número de cromosomas modelo (1 < n)')
     n = int(n)
-
 
     cromosomasSeleccionados = seleccion(n)
     print("\n")
@@ -443,10 +440,13 @@ def cruzar(cromosomasSeleccionados, cruzamientoInit):
     for i in range(len(cromosomasSeleccionados)):
         sumFitness += funcionFitness(cromosomasSeleccionados[i])
     sumFitness = sumFitness / len(cromosomasSeleccionados)
-    while(funcionFitness(cruzamiento) <= (sumFitness)):
+    while(funcionFitness(cruzamiento) <= (210)):
         cruzamiento = singlePointCrossover(cromosomasSeleccionados)
         print("Valor Fitness del cruzamiento", cont+1, ":", funcionFitness(cruzamiento))
         cont = cont + 1
+        if cont == 10000:
+            seleccion(32)
+            cont = 0
         print("cromosomas seleccionados", cromosomasSeleccionados, "\n")
 
 
@@ -556,17 +556,8 @@ cromosomasSeleccionados = init()
 
 print()
 
+# Producir nueva generacion: 4 cromosomas
+# cruzarlos nuevamente
+# no me agrada el segundo acorde, mutarlo
 
-
-
-
-
-
-
-
-
-
-
-#playADN(ADN)
-#playChordProgression(chordProgression)
-
+# obtuvimos una nueva progresion armonica aleatoria!!!
